@@ -200,14 +200,13 @@ footer .ic{width:20px;height:20px;flex:none}
         <label class="scelta"><input type="radio" name="ruolo" value="altro"><span>Altro</span></label>
       </div><div class="campo" id="campo-altro" hidden style="margin-top:10px"><input id="ruolo_altro" name="ruolo_altro" type="text" maxlength="80" placeholder="Scrivi il tuo ruolo" aria-label="Il tuo ruolo"></div></fieldset>
       <fieldset class="gruppo"><legend>Ti fermi al pranzo conviviale (ore 13:00)?</legend><div class="scelte">
-        <label class="scelta"><input type="radio" name="pranzo" value="si" checked><span>Sì, mi fermo a pranzo</span></label>
+        <label class="scelta"><input type="radio" name="pranzo" value="si" required><span>Sì, mi fermo a pranzo</span></label>
         <label class="scelta"><input type="radio" name="pranzo" value="no"><span>No, solo la mattinata</span></label>
       </div></fieldset>
       <div class="campo" id="campo-allergie"><label for="allergie">Allergie o intolleranze alimentari <small>(facoltativo)</small></label><input id="allergie" name="allergie" type="text" maxlength="300"></div>
       <fieldset class="gruppo"><legend>Vieni alla visita in stalla Dal Maso? <small>(partenza dal ristorante alle 14:40, con mezzi propri)</small></legend><div class="scelte">
-        <label class="scelta"><input type="radio" name="visita" value="si"><span>Sì, vengo</span></label>
-        <label class="scelta"><input type="radio" name="visita" value="no" checked><span>No</span></label>
-        <label class="scelta"><input type="radio" name="visita" value="forse"><span>Non lo so ancora</span></label>
+        <label class="scelta"><input type="radio" name="visita" value="si" required><span>Sì, vengo</span></label>
+        <label class="scelta"><input type="radio" name="visita" value="no"><span>No</span></label>
       </div><p class="nota">La visita è solo per chi si iscrive, per ragioni organizzative e di biosicurezza.</p></fieldset>
       <fieldset class="gruppo"><legend>Vengono altre persone della tua azienda?</legend><div class="scelte">
         <label class="scelta"><input type="radio" name="altri" value="0" checked><span>No, solo io</span></label>
@@ -250,16 +249,16 @@ footer .ic{width:20px;height:20px;flex:none}
     else if (d.liberi != null && d.liberi <= 20) $('posti').innerHTML = 'Restano <b>' + d.liberi + ' posti</b> su ' + d.posti + '.';
   }).catch(function () {});
 
+  function valore(n) { var c = modulo.querySelector('input[name=' + n + ']:checked'); return c ? c.value : ''; }
   // campi che compaiono solo quando servono
   function aggiorna() {
     var ruolo = modulo.querySelector('input[name=ruolo]:checked').value;
     $('campo-altro').hidden = ruolo !== 'altro';
-    $('campo-allergie').hidden = modulo.querySelector('input[name=pranzo]:checked').value !== 'si';
+    $('campo-allergie').hidden = valore('pranzo') !== 'si';
   }
   modulo.addEventListener('change', aggiorna); aggiorna();
 
   function mostra(tipo, testo) { esito.className = 'esito ' + tipo; esito.textContent = testo; }
-  function valore(n) { var c = modulo.querySelector('input[name=' + n + ']:checked'); return c ? c.value : ''; }
 
   modulo.addEventListener('submit', function (ev) {
     ev.preventDefault();
@@ -273,6 +272,8 @@ footer .ic{width:20px;height:20px;flex:none}
     if (!d.azienda.trim()) { $('azienda').focus(); return mostra('no', 'Scrivi l’azienda agricola o lo studio.'); }
     if (d.telefono.replace(/\D/g, '').length < 6) { $('telefono').focus(); return mostra('no', 'Il telefono non sembra giusto.'); }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email.trim())) { $('email').focus(); return mostra('no', 'L’e-mail non sembra giusta: ci mandiamo l’attestato.'); }
+    if (d.pranzo !== 'si' && d.pranzo !== 'no') return mostra('no', 'Dicci se ti fermi al pranzo conviviale: sì o no.');
+    if (d.visita !== 'si' && d.visita !== 'no') return mostra('no', 'Dicci se vieni alla visita in stalla: sì o no.');
     if (!d.privacy) return mostra('no', 'Serve il consenso al trattamento dei dati per iscriverti.');
     invia.disabled = true; invia.textContent = 'Invio…';
     fetch(URL_FUNZIONE, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
