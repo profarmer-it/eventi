@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src https://gmhmxybqmkcmnbjdnslz.supabase.co wss://gmhmxybqmkcmnbjdnslz.supabase.co; frame-src https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
+<title>Iscritti agli eventi · Pro Farmer</title>
+<meta name="theme-color" content="#083481">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="gestione.css?v=20261119a">
+</head>
+<body>
+<!-- Il cruscotto degli eventi Pro Farmer (dal 19/11/2026, prima era un riquadro nel
+     Cruscotto di Riposa Pro). La pagina non contiene dati: li dà il database solo a
+     chi entra con l'account di Pro Farmer (ruolo interno, RLS in 53-eventi-iscrizioni.sql). -->
+<header class="testa">
+  <div class="testa-dentro">
+    <a class="marchio" href="../"><img src="../assets/pf_bianco.png" alt="Pro Farmer" width="360" height="136"></a>
+    <span class="testa-nome">Iscritti agli eventi</span>
+    <div class="testa-azioni" id="azioni" hidden>
+      <button type="button" class="tasto-testa" id="aggiorna" title="Aggiorna adesso">Aggiorna</button>
+      <button type="button" class="tasto-testa" id="esci">Esci</button>
+    </div>
+  </div>
+</header>
+
+<main class="pagina">
+  <section id="accesso" class="accesso" hidden>
+    <h1>Entra</h1>
+    <p class="aiuto-chiaro">Con l'e-mail e la password di Pro Farmer, le stesse di Riposa Pro.</p>
+    <form id="modulo-accesso" novalidate>
+      <label for="email">E-mail</label>
+      <input id="email" type="email" autocomplete="username" inputmode="email" required>
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+      <div class="antirobot" data-antirobot></div>
+      <button type="submit" class="bottone" id="entra">Entra</button>
+      <p class="messaggio" id="messaggio-accesso" role="alert"></p>
+    </form>
+    <p class="aiuto-chiaro piccolo">Password dimenticata? Cambiala da Riposa Pro (riposa.profarmer.it/pro/, «Password dimenticata?») e torna qui.</p>
+  </section>
+
+  <section id="cruscotto" hidden>
+    <nav class="scelta-eventi" id="scelta-eventi" aria-label="Eventi"></nav>
+    <div id="evento"></div>
+  </section>
+
+  <p id="carico" class="carico">Un momento…</p>
+</main>
+
+<div class="avviso" id="avviso" role="status" aria-live="polite"></div>
+
+<script src="../assets/vendor/supabase-2.45.4.js"></script>
+<script src="../assets/antirobot.js?v=20261119a"></script>
+<script src="gestione.js?v=20261119a"></script>
+</body>
+</html>

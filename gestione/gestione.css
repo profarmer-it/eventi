@@ -1,0 +1,175 @@
+/* Eventi Pro Farmer · gestione degli iscritti (19/11/2026).
+   Colori e carattere di eventi.profarmer.it: blu Pro Farmer, arancio, Inter.
+   La testa è blu come il sito; l'elenco su fondo chiaro, da leggere bene anche in sala. */
+@font-face{font-family:Inter;src:url(../assets/font/inter-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:Inter;src:url(../assets/font/inter-500.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:Inter;src:url(../assets/font/inter-600.woff2) format("woff2");font-weight:600 700;font-display:swap}
+@font-face{font-family:Inter;src:url(../assets/font/inter-800.woff2) format("woff2");font-weight:800 900;font-display:swap}
+
+:root{
+  --blu:#083481;--blu2:#0B3F96;--notte:#05225A;--azzurro:#3DBDEC;--cielo:#B2CEE7;--arancio:#F7941D;--arancio-scuro:#E2831A;
+  --inchiostro:#0E0E0E;--tenue:#5B6474;--carta:#FFFFFF;--campo:#EEF2F8;--linea:#D9E0EC;--errore:#B23A2E;--ok:#2E7D4F;--ok-chiaro:#E3F2E8;
+  --margine:clamp(16px,4vw,40px);--largo:1180px;--raggio:16px
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--campo);color:var(--inchiostro);font:400 16px/1.5 Inter,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+a{color:var(--blu)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--arancio);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* testa */
+.testa{background:var(--blu);color:#fff;padding-top:env(safe-area-inset-top);position:sticky;top:0;z-index:10;box-shadow:0 1px 0 rgba(255,255,255,.08)}
+.testa-dentro{max-width:calc(var(--largo) + 2*var(--margine));margin:0 auto;padding:12px var(--margine);display:flex;align-items:center;gap:14px}
+.marchio img{height:34px;width:auto;display:block}
+.testa-nome{font-weight:700;font-size:15px;color:var(--cielo);border-left:1px solid rgba(255,255,255,.25);padding-left:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.testa-azioni{margin-left:auto;display:flex;gap:8px;flex:none}
+.tasto-testa{min-height:40px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;font-weight:600;font-size:14px;cursor:pointer}
+.tasto-testa:hover{border-color:#fff}
+.tasto-testa:disabled{opacity:.5}
+
+.pagina{max-width:calc(var(--largo) + 2*var(--margine));margin:0 auto;padding:20px var(--margine) calc(56px + env(safe-area-inset-bottom))}
+.carico{color:var(--tenue);text-align:center;padding:60px 0}
+
+/* accesso */
+.accesso{max-width:420px;margin:40px auto 0;background:var(--carta);border-radius:22px;padding:28px 24px;box-shadow:0 10px 30px rgba(8,52,129,.08)}
+.accesso h1{font-size:34px;font-weight:900;letter-spacing:-.04em;margin:0 0 6px;color:var(--blu)}
+.aiuto-chiaro{color:var(--tenue);margin:0 0 18px}
+.aiuto-chiaro.piccolo{font-size:14px;margin:18px 0 0}
+.accesso label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+.accesso input{width:100%;min-height:50px;padding:12px 14px;border:1px solid var(--linea);border-radius:12px;background:#fff;font-size:17px}
+.accesso input:focus{border-color:var(--blu);outline:none;box-shadow:0 0 0 3px rgba(8,52,129,.15)}
+.bottone{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 24px;border:0;border-radius:999px;background:var(--arancio);color:var(--inchiostro);font-weight:800;font-size:16px;cursor:pointer;text-decoration:none;transition:background-color .2s,transform .12s}
+.bottone:hover{background:var(--arancio-scuro)}
+.bottone:active{transform:scale(.98)}
+.bottone:disabled{opacity:.55;cursor:default}
+.accesso .bottone{width:100%;margin-top:20px}
+.bottone-chiaro{background:var(--blu);color:#fff;min-height:44px;font-size:15px;padding:10px 18px}
+.bottone-chiaro:hover{background:var(--blu2)}
+.messaggio{color:var(--errore);font-weight:600;font-size:15px;margin:12px 0 0;min-height:1em}
+.messaggio:empty{display:none}
+.antirobot{display:none;margin-top:16px;padding:12px;border:1px solid var(--linea);border-radius:12px;background:var(--campo)}
+.antirobot.aperto{display:block}
+.antirobot-testo{margin:0 0 10px;font-size:14px;color:var(--tenue)}
+.antirobot-widget{border-radius:10px;overflow:hidden;line-height:0}
+.antirobot-widget.stretto{display:flex;justify-content:center;overflow:visible}
+.antirobot-fisso{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:30;background:#fff}
+
+/* scelta dell'evento */
+.scelta-eventi{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;margin:0 calc(-1*var(--margine)) 0;padding-left:var(--margine);padding-right:var(--margine);scrollbar-width:none;align-items:center}
+.scelta-eventi::-webkit-scrollbar{display:none}
+.scheda-evento{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:2px;max-width:260px;padding:10px 16px;border-radius:14px;border:1px solid var(--linea);background:#fff;cursor:pointer;text-align:left}
+.scheda-evento .data{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tenue)}
+.scheda-evento .nome{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.scheda-evento.attiva{background:var(--blu);border-color:var(--blu);color:#fff}
+.scheda-evento.attiva .data{color:var(--cielo)}
+.scheda-evento.passato:not(.attiva){opacity:.7}
+.separa{flex:none;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--tenue);padding:0 4px 0 10px}
+
+/* testa dell'evento */
+.evento-testa{background:var(--blu);color:#fff;border-radius:22px;padding:24px 24px 22px;position:relative;overflow:hidden}
+.evento-testa::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(61,189,236,.28),transparent 70%);pointer-events:none}
+.quando-evento{margin:0;font-size:14px;font-weight:700;color:var(--cielo);text-transform:capitalize}
+.oggi{display:inline-block;background:var(--arancio);color:var(--inchiostro);border-radius:999px;padding:2px 10px;margin-right:4px;text-transform:none}
+.evento-testa h1{margin:8px 0 4px;font-size:clamp(28px,5vw,44px);font-weight:900;letter-spacing:-.04em;line-height:1.02;max-width:22em}
+.sottotitolo{margin:0;font-size:17px;font-weight:600;color:var(--arancio)}
+.stato-iscrizioni{margin:12px 0 0;font-size:14px;color:#dfe8f5}
+.stato-iscrizioni a{color:#fff;font-weight:700}
+
+/* numeri */
+.numeri{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:14px 0}
+.numero{background:#fff;border-radius:var(--raggio);padding:16px 16px 14px;display:flex;flex-direction:column;min-width:0;border:1px solid transparent}
+.numero .cifra{font-size:34px;font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--blu);font-variant-numeric:tabular-nums}
+.numero .cifra small{font-size:17px;font-weight:700;color:var(--tenue);letter-spacing:0}
+.numero .etichetta{margin-top:8px;font-weight:700;font-size:14px}
+.numero .sotto{margin-top:2px;font-size:13px;color:var(--tenue);line-height:1.35}
+.numero.principale{background:var(--arancio)}
+.numero.principale .cifra,.numero.principale .cifra small{color:var(--inchiostro)}
+.numero.principale .sotto{color:#3a2a10}
+.numero.attenzione{border-color:var(--arancio)}
+.numero.presenti .cifra{color:var(--ok)}
+
+/* ruoli */
+.ruoli{background:#fff;border-radius:var(--raggio);padding:14px 16px;margin:0 0 14px}
+.barra{display:flex;height:12px;border-radius:999px;overflow:hidden;gap:2px;background:var(--campo)}
+.pezzo{min-width:6px}
+.legenda{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px}
+.legenda li{display:flex;align-items:center;gap:6px}
+.legenda i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.legenda .novita{margin-left:auto;color:var(--tenue)}
+.r-allevatore{background:var(--blu)}
+.r-collaboratore{background:var(--azzurro)}
+.r-veterinario{background:var(--arancio)}
+.r-tecnico{background:#7C5CC4}
+.r-studente{background:#2E9C8F}
+.r-altro{background:#9AA3B2}
+
+/* attrezzi */
+.attrezzi{background:#fff;border-radius:var(--raggio);padding:14px;margin:0 0 14px;display:flex;flex-direction:column;gap:12px}
+#cerca{width:100%;min-height:48px;padding:10px 14px;border:1px solid var(--linea);border-radius:12px;background:var(--campo);font-size:16px}
+#cerca:focus{outline:none;border-color:var(--blu);background:#fff;box-shadow:0 0 0 3px rgba(8,52,129,.12)}
+.filtri{display:flex;flex-wrap:wrap;gap:6px}
+.filtro{min-height:38px;padding:6px 14px;border-radius:999px;border:1px solid var(--linea);background:#fff;font-size:14px;font-weight:600;cursor:pointer}
+.filtro b{font-weight:800;color:var(--tenue);margin-left:2px}
+.filtro.attivo{background:var(--inchiostro);border-color:var(--inchiostro);color:#fff}
+.filtro.attivo b{color:var(--arancio)}
+.attrezzi-fondo{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.ordina{font-size:14px;color:var(--tenue);display:flex;align-items:center;gap:8px}
+.ordina select{min-height:40px;padding:6px 10px;border:1px solid var(--linea);border-radius:10px;background:#fff;color:var(--inchiostro)}
+
+/* elenco */
+.quanti{margin:4px 4px 8px;font-size:14px;color:var(--tenue);font-weight:600}
+.elenco{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.iscritto{background:#fff;border-radius:var(--raggio);padding:14px 16px;border:1px solid transparent;min-width:0;transition:border-color .2s,background-color .2s}
+.iscritto.e-presente{border-color:#BFE0CB;background:#FAFDFB}
+.iscritto.in-attesa{background:#FFF8EE;border-color:#F6D9AE}
+.iscritto-testa{display:flex;align-items:flex-start;gap:12px}
+.num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--campo);color:var(--tenue);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+.chi{flex:1;min-width:0;display:flex;flex-direction:column}
+.chi strong{font-size:17px;font-weight:800;letter-spacing:-.01em;overflow-wrap:anywhere}
+.chi span{font-size:14px;color:var(--tenue);overflow-wrap:anywhere}
+.presente{flex:none;min-height:44px;padding:8px 14px;border-radius:999px;border:2px solid var(--blu);background:#fff;color:var(--blu);font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap;transition:background-color .15s,color .15s,transform .12s}
+.presente:active{transform:scale(.96)}
+.presente.si{background:var(--ok);border-color:var(--ok);color:#fff}
+.presente:disabled{opacity:.6}
+.stato-attesa{flex:none;font-size:13px;font-weight:700;color:#8A5300;background:#FCE7C8;border-radius:999px;padding:6px 12px}
+.dettagli{display:flex;flex-wrap:wrap;gap:4px 14px;margin:10px 0 0 42px;font-size:14px}
+.dettagli a{font-weight:600;text-decoration:none;overflow-wrap:anywhere}
+.dettagli a:hover{text-decoration:underline}
+.ruolo{font-weight:600;text-transform:capitalize}
+.tenue{color:var(--tenue)}
+.etichette{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0 42px}
+.et{font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--campo);color:#2A3242}
+.et.si{background:#E1ECFB;color:var(--blu)}
+.et.forse{background:#FCEBD3;color:#8A5300}
+.et.no{background:transparent;color:var(--tenue);border:1px dashed var(--linea)}
+.et.tenue{background:transparent;color:var(--tenue);padding-left:2px}
+.allergie{margin:10px 0 0 42px;font-size:14px;background:#FFF4E5;border-radius:10px;padding:8px 12px}
+
+.vuoto{background:#fff;border-radius:var(--raggio);padding:28px;text-align:center;color:var(--tenue)}
+.vuoto h1{color:var(--blu);margin:0 0 6px;font-size:26px}
+.vuoto p{margin:0}
+
+/* avviso in basso */
+.avviso{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translate(-50%,140%);background:var(--inchiostro);color:#fff;padding:12px 20px;border-radius:999px;font-weight:600;font-size:15px;max-width:calc(100vw - 32px);box-shadow:0 10px 30px rgba(0,0,0,.25);transition:transform .25s cubic-bezier(.2,.8,.2,1),visibility 0s .25s;visibility:hidden;z-index:40;pointer-events:none}
+.avviso.su{transform:translate(-50%,0);visibility:visible;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.avviso.errore{background:var(--errore)}
+
+@media (max-width:1000px){
+  .numeri{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .elenco{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .testa-nome{display:none}
+  .numeri{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .numero{padding:14px 14px 12px}
+  .numero .cifra{font-size:30px}
+  .evento-testa{padding:20px 18px;border-radius:18px}
+  .dettagli,.etichette,.allergie{margin-left:0}
+  .legenda .novita{margin-left:0}
+  .attrezzi-fondo .bottone{width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
