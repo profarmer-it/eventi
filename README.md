@@ -17,9 +17,26 @@ su riposa.profarmer.it, che però è l'app di piùLact e con gli eventi non c'en
 Non stanno qui: le pagine chiamano la funzione Supabase `iscrizione-evento`
 (progetto «riposa», sorgente in
 `piùLact/Riposa interno/integrazioni/supabase/functions/iscrizione-evento/`).
-Tabelle `eventi` ed `eventi_iscrizioni` (`53-eventi-iscrizioni.sql`). Gli
-iscritti si vedono in Riposa Pro → Cruscotto (riquadro dell'evento: presenti
-per gli attestati, elenco Excel). Le e-mail partono da
+Tabelle `eventi` ed `eventi_iscrizioni` (`53-eventi-iscrizioni.sql`, permessi
+stretti in `88`).
+
+## Il cruscotto degli iscritti: `/gestione/` (dal 19/11/2026)
+
+`eventi.profarmer.it/gestione/` (prima era un riquadro nel Cruscotto di Riposa
+Pro, tolto il 19/11). Si entra con l'account di Pro Farmer di Riposa Pro
+(e-mail e password, anti-robot Cloudflare: il nome `eventi.profarmer.it` deve
+stare nel widget «Easy e Riposa Pro»; dal browser interno dell'app Claude il
+controllo non passa). Il database dà i dati solo agli interni (`sono_interno()`).
+Per evento: iscritti sui posti, lista d'attesa, pranzo (con le allergie),
+visita, altri dell'azienda, presenti, ruoli; elenco con ricerca, filtri e
+ordine; «Segna presente» il giorno dell'evento (per gli attestati); Excel
+(CSV con «;», i testi che iniziano con = + - @ hanno una tabulazione davanti).
+`#codice` nell'indirizzo apre quell'evento. File: `gestione/` più
+`assets/antirobot.js` e `assets/vendor/supabase-2.45.4.js` (uguali a Riposa).
+CSP stretta: script solo dal sito e da Cloudflare, connessioni solo a Supabase.
+Banco di prova con iscritti inventati: `Eventi/collaudo-gestione/` (in
+`profarmer-cloud`), anteprima `eventi-gestione` su http://localhost:8781/collaudo-gestione/
+(`?accesso`, `?vuoto`, `?errore`; password di prova «prova»). Le e-mail partono da
 `Pro Farmer Eventi <eventi@profarmer.it>`, le risposte vanno a info@profarmer.it.
 
 ## Un evento nuovo, passo per passo
@@ -36,7 +53,8 @@ per gli attestati, elenco Excel). Le e-mail partono da
    nella home `index.html`.
 3. **Database:** una riga in `eventi`
    (`codice`, `titolo`, `quando`, `posti`, `chiude_il`), per esempio
-   `vitelli-2027-02-10`. Se servono domande diverse (pranzo, visita…), vanno
+   `vitelli-2027-02-10`. Il codice inizia col nome della cartella: il cruscotto
+   ne ricava il link alla pagina di iscrizione. Se servono domande diverse (pranzo, visita…), vanno
    viste nella funzione e nella tabella.
 4. **Funzione:** aggiungere i testi dell'evento nella costante `EVENTI`
    (titolo, data, luogo, mappa, calendario, tag ActiveCampaign) e ripubblicarla
