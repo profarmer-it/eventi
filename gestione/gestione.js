@@ -3,7 +3,7 @@
    --------------------------------------------------------------------------
    Il cruscotto degli iscritti agli eventi, fuori da Riposa Pro (Giulio, 19/11:
    Riposa Pro serve solo a vendite, clienti, agenti e rivenditori).
-   Per evento: numeri (iscritti, lista d'attesa, pranzo, visita, presenti),
+   Per evento: numeri (iscritti, lista d'attesa, pranzo o cena, visita, presenti),
    ruoli, elenco con ricerca e filtri, «Presente» da segnare il giorno
    dell'evento (serve per gli attestati) ed elenco da scaricare per Excel.
 
@@ -12,6 +12,9 @@
    Cloudflare); il database dà eventi e iscritti solo a chi ha il ruolo
    interno (sono_interno(), RLS in 53-eventi-iscrizioni.sql) e lascia cambiare
    solo «presente». Ogni testo che arriva dal database passa da esc().
+   Dal 20/11/2026 ci sono anche gli eventi con un modulo Google (la serata del
+   2/12 con Embryovet): le risposte si importano nel database con
+   eventi_importa_modulo() (90) e qui si vedono come le altre.
    Il banco di prova (Eventi/collaudo-gestione/) mette un finto Supabase in
    window.FINTO_SUPABASE prima di questo file.
    ========================================================================== */
@@ -159,6 +162,19 @@
     if (att) nav.scrollLeft = Math.max(0, att.offsetLeft - nav.offsetLeft - 16);
   }
 
+  /* Cosa chiede l'evento (90-eventi-da-modulo-google.sql): il pasto (pranzo, cena o
+     nessuno), la visita in stalla, e se gli iscritti arrivano dalle pagine di
+     eventi.profarmer.it o da un modulo Google importato. */
+  function cosa(e) {
+    const pasto = e && e.pasto ? e.pasto : 'pranzo';
+    return {
+      pasto: pasto === 'nessuno' ? null : pasto,
+      Pasto: pasto === 'cena' ? 'Cena' : 'Pranzo',
+      visita: !e || e.con_visita !== false,
+      dalSito: !e || !e.origine || e.origine === 'eventi.profarmer.it'
+    };
+  }
+
   function numeri(e) {
     const r = iscrizioni.filter(x => x.evento === e.codice);
     const dentro = r.filter(x => !x.lista_attesa), attesa = r.filter(x => x.lista_attesa);
@@ -181,24 +197,30 @@
     const chiuso = e.chiude_il && new Date(e.chiude_il).getTime() < Date.now();
     const oggi = new Date(e.quando).toLocaleDateString('it-IT', ROMA) === new Date().toLocaleDateString('it-IT', ROMA);
     const cartella = String(e.codice).split('-')[0];
+    const c = cosa(e);
+    const pagina = e.pagina || `../${cartella}/`;
     const tile = (cifra, etichetta, sotto, cls) => `<div class="numero${cls ? ' ' + cls : ''}"><span class="cifra">${cifra}</span><span class="etichetta">${etichetta}</span>${sotto ? `<span class="sotto">${sotto}</span>` : ''}</div>`;
 
     let h = '<section class="evento-testa">'
       + `<p class="quando-evento">${oggi ? '<span class="oggi">Oggi</span> ' : ''}${esc(giorno(e.quando))} · ore ${esc(ora(e.quando))}</p>`
       + `<h1>${esc(titoloBreve(e))}</h1>`
       + (String(e.titolo).includes(' · ') ? `<p class="sottotitolo">${esc(String(e.titolo).split(' · ')[0])}</p>` : '')
+      + (e.luogo ? `<p class="luogo">${esc(e.luogo)}</p>` : '')
       + '<p class="stato-iscrizioni">'
       + (chiuso ? 'Iscrizioni chiuse' : e.chiude_il ? `Iscrizioni aperte fino al ${esc(breve(e.chiude_il))} alle ${esc(ora(e.chiude_il))}` : 'Iscrizioni aperte')
-      + ` · <a href="../${esc(cartella)}/" target="_blank" rel="noopener">pagina di iscrizione</a></p>`
+      + (c.dalSito ? ` · <a href="${esc(pagina)}" target="_blank" rel="noopener">pagina di iscrizione</a>`
+        : ` · dal <a href="${esc(pagina)}" target="_blank" rel="noopener">modulo Google</a>`
+          + (e.importato_il ? `, iscritti aggiornati al ${esc(breve(e.importato_il))} alle ${esc(ora(e.importato_il))}` : ''))
+      + '</p>'
       + '</section>';
 
     h += '<section class="numeri" aria-label="I numeri">'
       + tile(n.dentro.length + (e.posti != null ? `<small> / ${e.posti}</small>` : ''), 'Iscritti',
           liberi != null ? (liberi ? `restano ${liberi} ${liberi === 1 ? 'posto' : 'posti'}` : 'posti esauriti') : 'senza limite di posti', 'principale')
-      + tile(n.attesa.length, 'Lista d’attesa', n.attesa.length ? 'oltre i posti' : 'nessuno', n.attesa.length ? 'attenzione' : '')
-      + tile(n.pranzo, 'A pranzo', n.allergie ? `${n.allergie} con allergie o intolleranze` : 'nessuna allergia segnalata')
-      + tile(n.visita, 'In visita', n.forse ? `+ ${n.forse} forse` : '')
-      + tile(n.altri + (n.altriPiu ? '+' : ''), 'Altri dell’azienda', 'annunciati da chi si è iscritto')
+      + (e.posti != null || n.attesa.length ? tile(n.attesa.length, 'Lista d’attesa', n.attesa.length ? 'oltre i posti' : 'nessuno', n.attesa.length ? 'attenzione' : '') : '')
+      + (c.pasto ? tile(n.pranzo, 'A ' + c.pasto, n.allergie ? `${n.allergie} con allergie o intolleranze` : 'nessuna allergia segnalata') : '')
+      + (c.visita ? tile(n.visita, 'In visita', n.forse ? `+ ${n.forse} forse` : '') : '')
+      + (c.dalSito ? tile(n.altri + (n.altriPiu ? '+' : ''), 'Altri dell’azienda', 'annunciati da chi si è iscritto') : '')
       + tile(n.presenti + `<small> / ${n.dentro.length}</small>`, 'Presenti', n.presenti ? 'per gli attestati' : 'da segnare il giorno dell’evento', 'presenti')
       + '</section>';
 
@@ -208,13 +230,13 @@
       h += '<section class="ruoli" aria-label="Chi viene"><div class="barra">'
         + conta.map(([k, c]) => `<span class="pezzo r-${k}" style="flex:${c}" title="${RUOLI[k]}: ${c}"></span>`).join('') + '</div>'
         + '<ul class="legenda">' + conta.map(([k, c]) => `<li><i class="r-${k}"></i>${RUOLI[k]} <b>${c}</b></li>`).join('')
-        + `<li class="novita">Ok alle novità <b>${n.novita}</b></li></ul></section>`;
+        + (c.dalSito ? `<li class="novita">Ok alle novità <b>${n.novita}</b></li>` : '') + '</ul></section>';
     }
 
     h += '<section class="attrezzi">'
       + `<input type="search" id="cerca" placeholder="Cerca nome, azienda, comune, telefono…" value="${esc(cerca)}" aria-label="Cerca tra gli iscritti" autocomplete="off">`
       + '<div class="filtri" role="group" aria-label="Filtra">'
-      + [['tutti', 'Tutti', n.r.length], ['pranzo', 'A pranzo', n.pranzo], ['visita', 'In visita', n.visita + n.forse], ['attesa', 'Lista d’attesa', n.attesa.length],
+      + [['tutti', 'Tutti', n.r.length], ['pranzo', 'A ' + (c.pasto || 'pranzo'), c.pasto ? n.pranzo : 0], ['visita', 'In visita', c.visita ? n.visita + n.forse : 0], ['attesa', 'Lista d’attesa', n.attesa.length],
          ['presenti', 'Presenti', n.presenti], ['mancano', 'Non ancora arrivati', n.dentro.length - n.presenti]]
         .filter(([k, , c]) => k === 'tutti' || c || filtro === k)
         .map(([k, t, c]) => `<button type="button" class="filtro${filtro === k ? ' attivo' : ''}" data-filtro="${k}" aria-pressed="${filtro === k}">${t} <b>${c}</b></button>`).join('')
@@ -250,13 +272,14 @@
     if (!tutti.length) { box.innerHTML = '<div class="vuoto"><p>Ancora nessun iscritto.</p></div>'; return; }
     if (!r.length) { box.innerHTML = '<div class="vuoto"><p>Nessun iscritto corrisponde alla ricerca.</p></div>'; return; }
     let numero = 0;
+    const c = cosa(eventi.find(y => y.codice === scelto));
     box.innerHTML = `<p class="quanti">${r.length} ${r.length === 1 ? 'persona' : 'persone'}</p><ol class="elenco">` + r.map(x => {
       if (!x.lista_attesa) numero++;
       const tel = String(x.telefono || '').replace(/[^\d+]/g, '');
-      const ruolo = (RUOLO1[x.ruolo] || x.ruolo) + (x.ruolo_altro ? ': ' + x.ruolo_altro : '');
+      const ruolo = x.ruolo === 'altro' && x.ruolo_altro ? x.ruolo_altro : (RUOLO1[x.ruolo] || x.ruolo) + (x.ruolo_altro ? ': ' + x.ruolo_altro : '');
       const etichette = [
-        x.pranzo ? '<span class="et si">Pranzo</span>' : '<span class="et no">Senza pranzo</span>',
-        x.visita === 'si' ? '<span class="et si">Visita</span>' : x.visita === 'forse' ? '<span class="et forse">Visita forse</span>' : '<span class="et no">Senza visita</span>',
+        !c.pasto ? '' : x.pranzo ? `<span class="et si">${c.Pasto}</span>` : `<span class="et no">Senza ${c.pasto}</span>`,
+        !c.visita ? '' : x.visita === 'si' ? '<span class="et si">Visita</span>' : x.visita === 'forse' ? '<span class="et forse">Visita forse</span>' : '<span class="et no">Senza visita</span>',
         x.altri ? `<span class="et">+${Number(x.altri) === 3 ? '3 o più' : Number(x.altri)} dell’azienda</span>` : '',
         x.vacche != null ? `<span class="et">${esc(Number(x.vacche).toLocaleString('it-IT'))} vacche</span>` : '',
         x.consenso_novita ? '<span class="et tenue">ok novità</span>' : ''
@@ -322,9 +345,12 @@
   function scaricaExcel() {
     const e = eventi.find(y => y.codice === scelto);
     const r = iscrizioni.filter(i => i.evento === scelto);
+    const c = cosa(e);
+    // le colonne che l'evento chiede: niente visita né «altri» per un modulo che non li ha
     const col = [['nome', 'Nome'], ['azienda', 'Azienda'], ['comune', 'Comune'], ['ruolo', 'Ruolo'], ['telefono', 'Telefono'], ['email', 'E-mail'],
-      ['vacche', 'Vacche in lattazione'], ['pranzo', 'Pranzo'], ['allergie', 'Allergie'], ['visita', 'Visita'], ['altri', 'Altri dell’azienda'],
-      ['lista_attesa', 'Lista d’attesa'], ['presente', 'Presente'], ['consenso_novita', 'Ok alle novità'], ['creato_il', 'Iscritto il']];
+      ['vacche', 'Vacche in lattazione'], c.pasto && ['pranzo', c.Pasto], ['allergie', 'Allergie'], c.visita && ['visita', 'Visita'],
+      c.dalSito && ['altri', 'Altri dell’azienda'], ['lista_attesa', 'Lista d’attesa'], ['presente', 'Presente'],
+      c.dalSito && ['consenso_novita', 'Ok alle novità'], ['creato_il', 'Iscritto il']].filter(Boolean);
     const val = (i, k) => {
       if (k === 'ruolo') return i.ruolo + (i.ruolo_altro ? ': ' + i.ruolo_altro : '');
       if (k === 'visita') return i.visita === 'si' ? 'sì' : i.visita;
@@ -346,6 +372,12 @@
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   }
+
+  // un indirizzo con #codice cambiato a mano (o il tasto indietro) apre quell'evento
+  window.addEventListener('hashchange', () => {
+    const voluto = decodeURIComponent(location.hash.slice(1));
+    if (voluto && voluto !== scelto && eventi.some(x => x.codice === voluto)) { scelto = voluto; filtro = 'tutti'; cerca = ''; disegna(); }
+  });
 
   // tornando sulla pagina (per esempio dal telefono in tasca) i dati si rinfrescano
   document.addEventListener('visibilitychange', () => {

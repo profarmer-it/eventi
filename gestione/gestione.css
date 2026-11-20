@@ -74,11 +74,12 @@ button,input,select{font:inherit;color:inherit}
 .oggi{display:inline-block;background:var(--arancio);color:var(--inchiostro);border-radius:999px;padding:2px 10px;margin-right:4px;text-transform:none}
 .evento-testa h1{margin:8px 0 4px;font-size:clamp(28px,5vw,44px);font-weight:900;letter-spacing:-.04em;line-height:1.02;max-width:22em}
 .sottotitolo{margin:0;font-size:17px;font-weight:600;color:var(--arancio)}
+.luogo{margin:4px 0 0;font-size:15px;color:#dfe8f5}
 .stato-iscrizioni{margin:12px 0 0;font-size:14px;color:#dfe8f5}
 .stato-iscrizioni a{color:#fff;font-weight:700}
 
 /* numeri */
-.numeri{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:14px 0}
+.numeri{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
 .numero{background:#fff;border-radius:var(--raggio);padding:16px 16px 14px;display:flex;flex-direction:column;min-width:0;border:1px solid transparent}
 .numero .cifra{font-size:34px;font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--blu);font-variant-numeric:tabular-nums}
 .numero .cifra small{font-size:17px;font-weight:700;color:var(--tenue);letter-spacing:0}
@@ -156,9 +157,6 @@ button,input,select{font:inherit;color:inherit}
 .avviso.su{transform:translate(-50%,0);visibility:visible;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
 .avviso.errore{background:var(--errore)}
 
-@media (max-width:1000px){
-  .numeri{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
 @media (max-width:760px){
   .elenco{grid-template-columns:1fr}
 }
