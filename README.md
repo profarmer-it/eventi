@@ -24,8 +24,8 @@ stretti in `88`).
 
 `eventi.profarmer.it/gestione/` (prima era un riquadro nel Cruscotto di Riposa
 Pro, tolto il 19/11). Si entra con l'account di Pro Farmer di Riposa Pro
-(e-mail e password, anti-robot Cloudflare: il nome `eventi.profarmer.it` deve
-stare nel widget «Easy e Riposa Pro»; dal browser interno dell'app Claude il
+(e-mail e password, anti-robot Cloudflare: `eventi.profarmer.it` è nel
+widget «Easy e Riposa Pro» dal 20/11/2026; dal browser interno dell'app Claude il
 controllo non passa). Il database dà i dati solo agli interni (`sono_interno()`).
 Per evento: iscritti sui posti, lista d'attesa, pranzo (con le allergie),
 visita, altri dell'azienda, presenti, ruoli; elenco con ricerca, filtri e
