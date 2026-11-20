@@ -75,5 +75,7 @@ cruscotto: l'evento ha una riga in `eventi` con `origine = 'modulo Google'`,
 `eventi_importa_modulo('<codice>', '<righe in JSON>')` (file `90`), che si
 rilancia senza doppioni. Per la serata del 2/12: foglio «Iscritti Serata Mammella
 2 dic 2026 - Embryovet» su Drive (profarmer.it@gmail.com), Claude lo legge col
-connettore Google Drive e importa quando Giulio dice «aggiorna il 2/12». Il
+connettore Google Drive e importa ogni mattina verso le 7:40 (attività pianificata
+«Eventi · aggiorna iscritti del 2/12» sul Mac, con l'app Claude aperta) o quando
+Giulio dice «aggiorna il 2/12». Il
 cruscotto dice quando è stato l'ultimo import.
