@@ -64,3 +64,16 @@ Banco di prova con iscritti inventati: `Eventi/collaudo-gestione/` (in
 6. Anteprima, via di Giulio, push su `main`.
 7. A evento finito: togliere il riquadro dalla home (la pagina può restare con
    «iscrizioni chiuse»: lo fa da sola dopo `chiude_il`).
+
+## Eventi con un modulo Google (dal 20/11/2026)
+
+Se un evento raccoglie le conferme con un modulo Google (la serata del 2/12 con
+Embryovet: il link gira negli inviti), gli iscritti si vedono lo stesso nel
+cruscotto: l'evento ha una riga in `eventi` con `origine = 'modulo Google'`,
+`pagina` = il link del modulo, `pasto` (`pranzo`, `cena` o `nessuno`) e
+`con_visita`; le risposte del foglio si importano con
+`eventi_importa_modulo('<codice>', '<righe in JSON>')` (file `90`), che si
+rilancia senza doppioni. Per la serata del 2/12: foglio «Iscritti Serata Mammella
+2 dic 2026 - Embryovet» su Drive (profarmer.it@gmail.com), Claude lo legge col
+connettore Google Drive e importa quando Giulio dice «aggiorna il 2/12». Il
+cruscotto dice quando è stato l'ultimo import.
