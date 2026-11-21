@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Event briefing – Pro Farmer</title>
+<link rel="alternate" hreflang="it" href="https://eventi.profarmer.it/briefing/">
+<link rel="alternate" hreflang="en" href="https://eventi.profarmer.it/briefing/en/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;--card:#ffffff;--soft:#f6f6f4;--ink:#111111;--muted:#5f6062;--line:#e3e3e3;
+  --accent:#ff6900;--accent-2:#e45e00;--accent-soft:#fff1e6;--err:#c62828;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Montserrat,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+
+.hero{border-bottom:1px solid var(--line);background:var(--soft)}
+.hero .in{max-width:760px;margin:0 auto;padding:40px 16px 48px}
+.logo{display:block;height:64px;width:auto}
+.lingua{display:inline-flex;align-items:center;margin-left:12px;padding:3px 10px;border:1.5px solid currentColor;border-radius:999px;font-size:12px;font-weight:700;color:inherit;text-decoration:none}
+.brand{display:inline-block;margin-top:34px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.hero h1{font-weight:800;font-size:clamp(30px,5.4vw,46px);line-height:1.1;letter-spacing:-.02em;margin:10px 0 16px}
+.hero h1 .u{box-shadow:inset 0 -.32em 0 var(--accent-soft)}
+.hero p{color:var(--muted);margin:0;max-width:56ch;font-size:16px}
+.meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px;font-size:13px;font-weight:600}
+.meta span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:1px}
+
+main{max-width:760px;margin:0 auto;padding:36px 16px 80px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 30px;margin-bottom:16px;scroll-margin-top:20px;transition:border-color .2s}
+.card.err{border-color:var(--err);animation:shake .35s}
+@keyframes shake{25%,75%{transform:translateX(-6px)}50%{transform:translateX(6px)}}
+.head{display:flex;gap:16px;align-items:flex-start;margin-bottom:20px}
+.no{flex:none;width:36px;height:36px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font:700 14px Montserrat,sans-serif;transition:all .2s}
+.card.ok .no{background:var(--accent);border-color:var(--accent);color:#fff}
+.card h2{font-weight:700;font-size:20px;line-height:1.3;margin:5px 0 4px;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:0;font-size:14px}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+label.f,.lbl{display:block;font-weight:600;font-size:13px;margin-bottom:6px}
+.req::after{content:" *";color:var(--accent)}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=month],textarea{
+  width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:15px;background:#fff;color:var(--ink);transition:border .15s,box-shadow .15s}
+textarea{min-height:90px;resize:vertical}
+input::placeholder,textarea::placeholder{color:#a3a3a3}
+input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(255,105,0,.15)}
+.mt{margin-top:18px}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.pill{position:relative;display:block;cursor:pointer}
+.pill input{position:absolute;opacity:0;pointer-events:none}
+.pill span{display:flex;flex-direction:column;gap:1px;height:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;transition:all .15s;user-select:none}
+.pill b{font-weight:600;font-size:14px}
+.pill small{color:var(--muted);font-size:12px}
+.pill:hover span{border-color:var(--ink)}
+.pill input:checked+span{background:var(--ink);border-color:var(--ink);color:#fff;box-shadow:inset 4px 0 0 var(--accent)}
+.pill input:checked+span small{color:rgba(255,255,255,.7)}
+.pill input:focus-visible+span{box-shadow:0 0 0 4px rgba(255,105,0,.25)}
+
+.counter{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.big{font-weight:800;font-size:44px;line-height:1;min-width:3.2ch;letter-spacing:-.03em}
+input[type=range]{flex:1;min-width:200px;accent-color:var(--accent)}
+.counter input[type=number]{width:120px}
+
+.reveal{display:none;margin-top:18px}
+.reveal.on{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:13px;color:var(--muted);margin-top:20px;cursor:pointer}
+.consent input{accent-color:var(--accent);margin-top:2px;width:18px;height:18px;flex:none}
+
+.actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:24px}
+button{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:16px 34px;font:700 15px Montserrat,sans-serif;letter-spacing:.02em;cursor:pointer;transition:transform .15s,background .15s}
+button:hover{background:var(--accent-2);transform:translateY(-1px)}
+button:disabled{opacity:.6;cursor:wait;transform:none}
+#status{font-size:14px;color:var(--err);font-weight:500}
+
+/* Schermata di invio */
+.ov{position:fixed;inset:0;z-index:50;background:#fff;display:none;place-items:center;padding:24px 16px;overflow-y:auto}
+.ov.on{display:grid;animation:fade .3s}
+.ov .box{width:100%;max-width:520px;text-align:center}
+.ov .logo{height:52px;margin:0 auto 34px}
+.ov h2{font-weight:800;font-size:clamp(24px,4.5vw,30px);line-height:1.2;letter-spacing:-.02em;margin:0 0 10px}
+.ov p{color:var(--muted);margin:0 auto 22px;max-width:42ch}
+.spin{width:64px;height:64px;border-radius:50%;border:5px solid var(--accent-soft);border-top-color:var(--accent);margin:0 auto 24px;animation:rot .9s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.check{width:76px;height:76px;border-radius:50%;background:var(--accent);display:grid;place-items:center;margin:0 auto 24px;animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+.check path{stroke-dasharray:30;stroke-dashoffset:30;animation:draw .45s .25s forwards}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+.recap{text-align:left;background:var(--soft);border-radius:12px;padding:18px 20px;margin:0 0 24px;font-size:14px}
+.recap div{display:flex;justify-content:space-between;gap:16px;padding:6px 0;border-bottom:1px solid var(--line)}
+.recap div:last-child{border-bottom:0}
+.recap dt{color:var(--muted)}
+.recap dd{margin:0;font-weight:600;text-align:right}
+.ov .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
+.ghost:hover{background:var(--soft)}
+.errx{width:76px;height:76px;border-radius:50%;background:#fdecea;color:var(--err);display:grid;place-items:center;margin:0 auto 24px;font-size:36px;font-weight:700}
+.st{display:none}.st.on{display:block}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:32px}
+.hp{position:absolute;left:-9999px}
+
+@media (max-width:640px){
+  .hero .in{padding:28px 16px 36px}
+  .logo{height:50px}
+  .card{padding:22px 18px}
+  .head{gap:12px}
+  .grid{grid-template-columns:1fr}
+  .tiles{grid-template-columns:1fr 1fr}
+  button{width:100%}
+}
+.lw{display:block;width:170px;height:64px;overflow:hidden}.lw img{display:block;height:85.6px;width:auto;max-width:none;margin:-10.8px 0 0 -40.4px}.ov .lw{margin:0 auto 34px}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="in">
+    <span class="lw"><img alt="Pro Farmer" src="/assets/pro-farmer-logo.png"></span>
+    <div class="brand">Event request</div> <a class="lingua" href="/briefing/" hreflang="it" lang="it">IT</a>
+    <h1>Let’s organise <span class="u">your event</span> together</h1>
+    <p>Pro Farmer comes from the barn: we organise on-farm training, technical workshops, webinars, conferences and international events for the dairy sector. Tell us about the event you have in mind and we’ll prepare a tailored proposal.</p>
+    <div class="meta"><span>About 3 minutes</span><span>No commitment</span><span>We’ll get back to you</span></div>
+  </div>
+</header>
+
+<main>
+<form id="f" novalidate>
+
+  <section class="card" id="c1">
+    <div class="head"><div class="no">1</div><div><h2>About you</h2><p class="sub">Your company and the contact person for the event.</p></div></div>
+    <div class="grid">
+      <div><label class="f req" for="az">Company</label><input id="az" type="text" name="Azienda" autocomplete="organization"></div>
+      <div><label class="f req" for="nome">Contact person</label><input id="nome" type="text" name="Referente" autocomplete="name" placeholder="First and last name"></div>
+      <div><label class="f" for="ruolo">Role</label><input id="ruolo" type="text" name="Ruolo" autocomplete="organization-title"></div>
+      <div><label class="f" for="settore">Company field</label><input id="settore" type="text" name="Ambito azienda" placeholder="E.g. milking robots, nutrition, genetics"></div>
+      <div><label class="f req" for="em">Email</label><input id="em" type="email" name="email" autocomplete="email"></div>
+      <div><label class="f" for="tel">Phone</label><input id="tel" type="tel" name="Telefono" autocomplete="tel"></div>
+    </div>
+  </section>
+
+  <section class="card" id="c8">
+    <div class="head"><div class="no">2</div><div><h2>What kind of event?</h2><p class="sub">Format, place and topics.</p></div></div>
+    <span class="lbl req">Format</span>
+    <div class="tiles">
+      <label class="pill"><input type="radio" name="Formato" value="On-farm training"><span><b>On-farm training</b><small>Theory and practice in the barn</small></span></label>
+      <label class="pill"><input type="radio" name="Formato" value="Open day"><span><b>Open day</b><small>A farm visit</small></span></label>
+      <label class="pill"><input type="radio" name="Formato" value="Technical conference"><span><b>Technical conference</b><small>In a hall, several speakers</small></span></label>
+      <label class="pill"><input type="radio" name="Formato" value="Webinar"><span><b>Webinar</b><small>Online</small></span></label>
+      <label class="pill"><input type="radio" name="Formato" value="Hybrid event"><span><b>Hybrid</b><small>In person + streaming</small></span></label>
+      <label class="pill"><input type="radio" name="Formato" value="To be decided"><span><b>To be decided</b><small>Advise us</small></span></label>
+    </div>
+    <div class="mt"><span class="lbl">Do you already have a farm or venue to host the event?</span>
+      <div class="tiles">
+        <label class="pill"><input type="radio" name="Sede" value="Yes, we have the farm/venue" data-reveal="sede"><span><b>Yes</b><small>Already chosen</small></span></label>
+        <label class="pill"><input type="radio" name="Sede" value="No, to be found with Pro Farmer"><span><b>No</b><small>Help us find one</small></span></label>
+        <label class="pill"><input type="radio" name="Sede" value="Not needed (online)"><span><b>Not needed</b><small>Online event</small></span></label>
+      </div>
+    </div>
+    <div class="reveal" id="sede"><label class="f" for="sd">Which and where?</label><input id="sd" type="text" name="Dettagli sede" placeholder="E.g. Rossi farm, Soresina (Cremona) – milking robots, 300 cows"></div>
+    <div class="mt"><span class="lbl">Topics</span>
+      <div class="tiles">
+        <label class="pill"><input type="checkbox" name="Temi" value="Robotic milking"><span><b>Robotic milking</b></span></label>
+        <label class="pill"><input type="checkbox" name="Temi" value="Calves, calving and colostrum"><span><b>Calves and colostrum</b></span></label>
+        <label class="pill"><input type="checkbox" name="Temi" value="Feeding and mixer wagon"><span><b>Feeding and TMR</b></span></label>
+        <label class="pill"><input type="checkbox" name="Temi" value="Animal health and welfare"><span><b>Health and welfare</b></span></label>
+        <label class="pill"><input type="checkbox" name="Temi" value="Farm staff management"><span><b>Farm staff</b></span></label>
+        <label class="pill"><input type="checkbox" name="Temi" value="Biogas and biomethane"><span><b>Biogas and biomethane</b></span></label>
+        <label class="pill"><input type="checkbox" name="Temi" value="Product / technology launch"><span><b>Product launch</b></span></label>
+      </div>
+      <input class="mt" type="text" name="Altri temi" aria-label="Other topics" placeholder="Other topic or details (optional)">
+    </div>
+  </section>
+
+  <section class="card" id="c2">
+    <div class="head"><div class="no">3</div><div><h2>Who is the event for?</h2><p class="sub">You can choose more than one.</p></div></div>
+    <div class="tiles">
+      <label class="pill"><input type="checkbox" name="Target evento" value="Farmers and owners"><span><b>Farmers</b><small>Owners and partners</small></span></label>
+      <label class="pill"><input type="checkbox" name="Target evento" value="Farm staff"><span><b>Farm staff</b><small>Milkers, workers</small></span></label>
+      <label class="pill"><input type="checkbox" name="Target evento" value="Vets and nutritionists"><span><b>Advisors</b><small>Vets, nutritionists</small></span></label>
+      <label class="pill"><input type="checkbox" name="Target evento" value="Sales network and dealers"><span><b>Sales network</b><small>Agents, dealers, service</small></span></label>
+      <label class="pill"><input type="checkbox" name="Target evento" value="Students"><span><b>Students</b><small>Agricultural schools, universities</small></span></label>
+    </div>
+    <div class="mt"><label class="f" for="tn">About the audience <span style="color:var(--muted);font-weight:400">(optional)</span></label><input id="tn" type="text" name="Dettagli target" placeholder="E.g. customers with milking robots in Lombardy"></div>
+  </section>
+
+  <section class="card" id="c3">
+    <div class="head"><div class="no">4</div><div><h2>How many people will attend?</h2><p class="sub">Choose a range or give the exact number.</p></div></div>
+    <div class="tiles" id="fasce">
+      <label class="pill"><input type="radio" name="Fascia partecipanti" value="Up to 30"><span><b>Up to 30</b></span></label>
+      <label class="pill"><input type="radio" name="Fascia partecipanti" value="30–50"><span><b>30–50</b></span></label>
+      <label class="pill"><input type="radio" name="Fascia partecipanti" value="50–100"><span><b>50–100</b></span></label>
+      <label class="pill"><input type="radio" name="Fascia partecipanti" value="100–200"><span><b>100–200</b></span></label>
+      <label class="pill"><input type="radio" name="Fascia partecipanti" value="200–500"><span><b>200–500</b></span></label>
+      <label class="pill"><input type="radio" name="Fascia partecipanti" value="Over 500"><span><b>Over 500</b></span></label>
+    </div>
+    <div class="mt" style="max-width:260px"><label class="f" for="num">Or exact number</label><input type="number" id="num" name="Numero partecipanti" min="1" placeholder="E.g. 80"></div>
+  </section>
+
+  <section class="card" id="c4">
+    <div class="head"><div class="no">5</div><div><h2>When and how long</h2><p class="sub">When you would like to hold it and for how long.</p></div></div>
+    <div class="grid">
+      <div><label class="f req" for="periodo">Approximate month</label><input id="periodo" type="month" name="Periodo"></div>
+      <div><label class="f" for="pn">Preferred dates or constraints</label><input id="pn" type="text" name="Note periodo" placeholder="E.g. avoid trade fairs, harvest, silage time"></div>
+    </div>
+    <div class="mt"><span class="lbl req">Duration</span>
+      <div class="tiles">
+        <label class="pill"><input type="radio" name="Durata" value="1–2 hours"><span><b>1–2 hours</b><small>Webinar, evening meeting</small></span></label>
+        <label class="pill"><input type="radio" name="Durata" value="Half day"><span><b>Half day</b><small>Morning or afternoon</small></span></label>
+        <label class="pill"><input type="radio" name="Durata" value="1 day"><span><b>1 day</b><small>With lunch</small></span></label>
+        <label class="pill"><input type="radio" name="Durata" value="2 days or more"><span><b>2+ days</b><small>Course, farm tour</small></span></label>
+        <label class="pill"><input type="radio" name="Durata" value="Series of meetings"><span><b>Series of meetings</b><small>Several dates over time</small></span></label>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="c5">
+    <div class="head"><div class="no">6</div><div><h2>Who will the speakers be?</h2><p class="sub">You can choose more than one.</p></div></div>
+    <div class="tiles">
+      <label class="pill"><input type="checkbox" name="Relatori" value="Our company specialists" data-reveal="rel"><span><b>Our specialists</b><small>Product specialists, R&amp;D</small></span></label>
+      <label class="pill"><input type="checkbox" name="Relatori" value="Speakers from the Pro Farmer network" data-reveal="rel"><span><b>Pro Farmer network</b><small>Vets, consultants, farmers</small></span></label>
+      <label class="pill"><input type="checkbox" name="Relatori" value="External speakers already chosen" data-reveal="rel"><span><b>External</b><small>Universities, guests</small></span></label>
+      <label class="pill"><input type="checkbox" name="Relatori" value="To be decided together"><span><b>To be decided</b><small>Let’s discuss it</small></span></label>
+    </div>
+    <div class="reveal" id="rel">
+      <div class="grid">
+        <div><label class="f" for="nr">How many speakers?</label><input id="nr" type="number" min="1" name="Numero relatori"></div>
+        <div><label class="f" for="tr">Names or profiles</label><input id="tr" type="text" name="Dettagli relatori" placeholder="E.g. a vet who specialises in robots"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="c6">
+    <div class="head"><div class="no">7</div><div><h2>Do you need interpreters?</h2><p class="sub">For foreign speakers (e.g. specialists from your head office) or foreign farm staff.</p></div></div>
+    <div class="tiles">
+      <label class="pill"><input type="radio" name="Interpreti" value="Yes, simultaneous" data-reveal="int"><span><b>Simultaneous</b><small>Headsets, also in the barn</small></span></label>
+      <label class="pill"><input type="radio" name="Interpreti" value="Yes, consecutive" data-reveal="int"><span><b>Consecutive</b><small>Next to the speaker</small></span></label>
+      <label class="pill"><input type="radio" name="Interpreti" value="Not sure yet" data-reveal="int"><span><b>Not sure</b><small>Advise us</small></span></label>
+      <label class="pill"><input type="radio" name="Interpreti" value="No"><span><b>No</b><small>One language only</small></span></label>
+    </div>
+    <div class="reveal" id="int"><label class="f" for="lg">Which languages?</label><input id="lg" type="text" name="Lingue" placeholder="E.g. Dutch ⇄ Italian, Punjabi for staff"></div>
+  </section>
+
+  <section class="card" id="c7">
+    <div class="head"><div class="no">8</div><div><h2>Anything else?</h2><p class="sub">Goals (training customers, generating leads, launching a product…), approximate budget, extras such as lunch, materials or certificates.</p></div></div>
+    <textarea name="Note" aria-label="Notes"></textarea>
+    <label class="consent"><input type="checkbox" id="privacy"><span>I consent to the processing of my personal data (EU Regulation 2016/679) to handle this request (<a href="https://www.iubenda.com/privacy-policy/12376136" target="_blank" rel="noopener">privacy policy</a>). <span style="color:var(--err)">*</span></span></label>
+    <input class="hp" type="text" name="botcheck" tabindex="-1" autocomplete="off">
+  </section>
+
+  <div class="actions">
+    <button type="submit" id="go">Send the request →</button>
+    <div id="status" role="status" aria-live="polite"></div>
+  </div>
+</form>
+
+
+<p class="foot">Pro Farmer SRLS · Via Milazzo 19, 26100 Cremona · profarmer.it</p>
+</main>
+
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-live="polite">
+  <div class="box">
+    <span class="lw"><img alt="Pro Farmer" src="/assets/pro-farmer-logo.png"></span>
+    <div class="st" id="stSending">
+      <div class="spin"></div>
+      <h2>Sending…</h2>
+      <p>We are sending your request, please wait a few seconds.</p>
+    </div>
+    <div class="st" id="stDone">
+      <div class="check"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h2>Request sent!</h2>
+      <p id="doneTxt">Thank you, we have received your request. The Pro Farmer team will contact you shortly to discuss it.</p>
+      <dl class="recap" id="recap"></dl>
+      <div class="btns"><a href="https://profarmer.it/en/"><button type="button">Go to profarmer.it</button></a></div>
+    </div>
+    <div class="st" id="stErr">
+      <div class="errx">!</div>
+      <h2>Sending failed</h2>
+      <p id="errTxt"></p>
+      <div class="btns"><button type="button" id="retry">Try again</button><button type="button" class="ghost" id="back">Back to the form</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== CONFIGURAZIONE INVIO EMAIL (Web3Forms) =====
+// 1. Vai su https://web3forms.com, inserisci mariaelsa@profarmer.it e clicca "Create Access Key".
+// 2. Copia la chiave che ti arriva via email e incollala qui sotto tra le virgolette.
+const ACCESS_KEY = "79f763b6-b2ae-43ae-be3a-3d0e1ce708ac";
+const DESTINATARIO = "mariaelsa@profarmer.it"; // mostrato solo nei messaggi di errore
+
+const $ = id => document.getElementById(id);
+const f = $("f"), statusEl = $("status");
+const checked = n => !!f.querySelector(`[name="${n}"]:checked`);
+
+// Partecipanti: fascia oppure numero esatto (uno esclude l'altro)
+const num = $("num");
+num.addEventListener("input", () => { if (num.value) f.querySelectorAll('[name="Fascia partecipanti"]').forEach(r => r.checked = false); });
+f.querySelectorAll('[name="Fascia partecipanti"]').forEach(r => r.addEventListener("change", () => { num.value = ""; }));
+
+// Campi che compaiono in base alla risposta
+f.addEventListener("change", e => {
+  if (e.target.type !== "radio" && e.target.type !== "checkbox") return;
+  const sec = e.target.closest(".card");
+  sec.querySelectorAll(".reveal").forEach(r => r.classList.toggle("on", !!sec.querySelector(`input[data-reveal="${r.id}"]:checked`)));
+});
+
+const rules = {
+  c1: () => {
+    if (!$("az").value.trim() || !$("nome").value.trim()) return "Please enter company and contact person.";
+    if (!$("em").value.trim() || !$("em").checkValidity()) return "Please enter a valid email.";
+    return true;
+  },
+  c8: () => checked("Formato") || "Please choose the event format.",
+  c2: () => checked("Target evento") || "Please tell us who the event is for.",
+  c3: () => +num.value > 0 || checked("Fascia partecipanti") || "Please choose a range or the number of attendees.",
+  c4: () => !$("periodo").value ? "Please enter the approximate month." : checked("Durata") || "Please choose the duration.",
+  c5: () => checked("Relatori") || "Please tell us who the speakers will be.",
+  c6: () => checked("Interpreti") || "Please tell us if you need interpreters.",
+  c7: () => $("privacy").checked || "We need your consent to process your data."
+};
+function update(){ for (const id in rules) { const ok = rules[id]() === true; $(id).classList.toggle("ok", ok); if (ok) $(id).classList.remove("err"); } }
+f.addEventListener("input", update); f.addEventListener("change", update);
+
+f.addEventListener("submit", async e => {
+  e.preventDefault();
+  statusEl.textContent = "";
+  for (const id in rules) {
+    const r = rules[id]();
+    if (r !== true) {
+      const c = $(id); c.classList.remove("err"); void c.offsetWidth; c.classList.add("err");
+      c.scrollIntoView({behavior:"smooth", block:"start"});
+      statusEl.textContent = r;
+      return;
+    }
+  }
+  const data = {};
+  for (const [k, v] of new FormData(f).entries()) { if (v) data[k] = data[k] ? data[k] + ", " + v : v; }
+  if (data.Periodo) { const [y, m] = data.Periodo.split("-"); data.Periodo = new Date(y, m - 1).toLocaleDateString("en-GB", {month:"long", year:"numeric"}); }
+  if (data.botcheck) return; // spam
+  delete data.botcheck;
+  data.Lingua = "Inglese (modulo in inglese)";
+  data.subject = "Nuova richiesta evento (EN) – " + (data.Azienda || "");
+  data.from_name = "Modulo eventi Pro Farmer (EN)";
+  data.access_key = ACCESS_KEY;
+
+  lastData = data;
+  sendData();
+});
+
+let lastData = null;
+const ov = $("ov");
+function stage(id){ ["stSending","stDone","stErr"].forEach(x => $(x).classList.toggle("on", x === id)); ov.classList.add("on"); document.body.style.overflow = "hidden"; }
+function esc(t){ const d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
+async function sendData(){
+  const data = lastData;
+  stage("stSending");
+  const t0 = Date.now();
+  try {
+    if (!/^[0-9a-f-]{36}$/i.test(ACCESS_KEY)) throw new Error("modulo non ancora configurato: manca la access key di Web3Forms");
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {"Content-Type": "application/json", "Accept": "application/json"},
+      body: JSON.stringify(data)
+    });
+    const out = await res.json().catch(() => ({}));
+    if (!res.ok || out.success === "false" || out.success === false) throw new Error(out.message || "errore di invio");
+    await new Promise(r => setTimeout(r, Math.max(0, 900 - (Date.now() - t0))));
+    const rows = [["Company", data.Azienda], ["Format", data.Formato], ["Attendees", data["Numero partecipanti"] || data["Fascia partecipanti"]], ["When", data.Periodo], ["Duration", data.Durata]];
+    $("recap").innerHTML = rows.filter(r => r[1]).map(r => `<div><dt>${r[0]}</dt><dd>${esc(String(r[1]))}</dd></div>`).join("");
+    $("doneTxt").textContent = `Thank you ${(data.Referente || "").split(" ")[0]}, we have received your request. The Pro Farmer team will contact you shortly at ${data.email}.`;
+    stage("stDone");
+    f.reset(); update();
+  } catch (err) {
+    $("errTxt").textContent = "Something went wrong (" + err.message + "). Please try again shortly or write to us at " + DESTINATARIO + ".";
+    stage("stErr");
+  }
+}
+$("retry").addEventListener("click", sendData);
+$("back").addEventListener("click", () => { ov.classList.remove("on"); document.body.style.overflow = ""; });
+update();
+</script>
+</body>
+</html>
